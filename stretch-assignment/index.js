@@ -17,6 +17,7 @@ let animationPlaying = false;
 // Used for the interval when traveler is moving
 let travelerMovement;
 let newDistance;
+const distanceLimit = 300;
 
 /*************************************
  * Setting initial styles and content
@@ -73,14 +74,24 @@ rockets.forEach((rocket, index) => {
     // Declare the new distance and make it equal to current distance
     let newDistance = distanceTraveled;
 
+    // Get initial width of container
+    let rocketWidth = rocket.offsetWidth;
+
     // Start the interval movement
     travelerMovement = setInterval(() => {
+      // Check if we have reached our goal. If we did, set an alert and return
+      if (newDistance >= distanceLimit) {
+        alert("Goal Reached");
+        gsap.to(".traveler", { rotation: 0, y: 0, duration: 1 });
+        clearInterval(travelerMovement);
+        return;
+      }
+
       newDistance += 1;
-      rocket.style.width = `${newDistance}px`;
+      rocketWidth += 1;
+      rocket.style.width = `${rocketWidth}px`;
       rocket.setAttribute("data-distance", newDistance);
       gsap.to(traveler, { rotation: 15, y: -10, x: newDistance, ease: "power", duration: 0.5 });
-
-      console.log(distanceTraveled);
     }, 20);
   });
 
@@ -100,6 +111,9 @@ rockets.forEach((rocket, index) => {
       console.log("Active rocket", index);
       return;
     }
+
+    // Make sure the distance traveled is reset back to 0 before coming in
+    rocket.setAttribute("data-distance", 0);
 
     // Get the rocket icon and traveler
     const rocketIcon = rocket.childNodes[0];
