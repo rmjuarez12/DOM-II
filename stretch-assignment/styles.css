@@ -4,33 +4,69 @@ body {
 }
 
 .blocks {
-  margin-top: 5%;
   display: flex;
   flex-direction: column;
+  margin-top: 100px;
 }
 
 .block {
-  width: 100px;
-  height: 100px;
   margin: 10px;
+  height: 70px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.block span {
+  display: inline-block;
+}
+
+.block .rocket i {
+  transform: rotate(-90deg);
+}
+
+.block .rocket {
+  font-size: 40pt;
+}
+
+.block .traveler {
+  font-size: 14pt;
+  display: none;
+}
+
+.active-rocket .traveler {
+  display: block;
 }
 
 .block--red {
-  background-color: red;
+  color: red;
+  border-left: red 0 solid;
+  border-bottom: red 0 solid;
 }
 
 .block--blue {
-  background-color: blue;
+  color: blue;
+  border-left: blue 0 solid;
+  border-bottom: blue 0 solid;
 }
 
 .block--green {
-  background-color: green;
+  color: green;
+  border-left: green 0 solid;
+  border-bottom: green 0 solid;
 }
 
 .block--pink {
-  background-color: pink;
+  color: hotpink;
+  border-left: hotpink 0 solid;
+  border-bottom: hotpink 0 solid;
 }
 
 .block--gray {
-  background-color: gray;
+  color: black;
+  border-left: black 0 solid;
+  border-bottom: black 0 solid;
+}
+
+.active-rocket {
+  border-width: 2px;
 }
