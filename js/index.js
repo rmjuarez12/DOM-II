@@ -1,4 +1,5 @@
-// Your code goes here
+// Import GSAP
+import { gsap } from "gsap";
 
 /*************************************
  * Declaring/Assigning variables
@@ -39,16 +40,6 @@ const contentPickDestination = document.querySelectorAll(".destination");
 // Get the footer
 const footer = document.querySelector("footer");
 
-// Smoothing variables
-let fadeInVal = 0;
-let fadeInVal2 = 0;
-let bringInVal = 100;
-
-// Use for interval functions
-let fadeInContent;
-let bringInContent;
-let bringInContentTriggered = false;
-
 /*************************************
  * Setting initial styles and content
  *************************************/
@@ -59,18 +50,15 @@ header.style.zIndex = 100;
 // Ensure the body does not create a horizontal scrollbar
 body.style.overflowX = "hidden";
 
-// Setting opacity of elements to 0
-introSection.style.opacity = fadeInVal;
-contentSection.style.opacity = fadeInVal;
-contentSectionImg.style.opacity = fadeInVal2;
-inverseContentSection.style.opacity = fadeInVal;
-inverseContentSectionImg.style.opacity = fadeInVal2;
+// Setting up some elements to start at opacity 0
+contentSectionImg.style.opacity = 0;
+inverseContentSectionImg.style.opacity = 0;
 
 // Setting up element that will come from left
-contentSectionImg.style.transform = `translateX(-${bringInVal}vw)`;
+contentSectionImg.style.transform = `translateX(100vw)`;
 
 // Setting up element that will come from right
-inverseContentSectionImg.style.transform = `translateX(${bringInVal}vw)`;
+inverseContentSectionImg.style.transform = `translateX(-100vw)`;
 
 // Add a draggable container for the destination section
 const newDestination = document.createElement("div");
@@ -150,9 +138,7 @@ body.addEventListener("wheel", (event) => {
     moveImg = "0";
   }
 
-  introSectionImg.style.opacity = getDirection;
-  introSectionImg.style.transform = `translateX(${moveImg}px)`;
-  introSectionImg.style.transition = "all 0.3s";
+  gsap.to(".intro img", { opacity: getDirection, x: moveImg, duration: 1.5 });
 });
 
 /*************************************
@@ -161,80 +147,26 @@ body.addEventListener("wheel", (event) => {
 
 // Load content in
 window.addEventListener("load", (event) => {
-  fadeInContent = setInterval(loadContent, 50);
+  // fadeInContent = setInterval(loadContent, 50);
+  gsap.from(".intro", { opacity: 0, y: -100, duration: 1.5 });
+  gsap.from(".content-section .text-content", { opacity: 0, y: 100, duration: 1.5 });
 });
-
-function loadContent() {
-  // slowly increase opacity value
-  if (fadeInVal < 1) {
-    fadeInVal += 0.1;
-  } else {
-    fadeInVal = 1;
-  }
-
-  // Fade in the intro content
-  introSection.style.opacity = fadeInVal;
-  introSection.style.transition = "all 0.3s";
-
-  // Fade in other content
-  contentSection.style.opacity = fadeInVal;
-  contentSection.style.transition = "all 0.3s";
-  inverseContentSection.style.opacity = fadeInVal;
-  inverseContentSection.style.transition = "all 0.3s";
-
-  if (fadeInVal === 1) {
-    clearInterval(fadeInContent);
-  }
-}
 
 /*************************************
  * Using scroll event
  *************************************/
 
-// Used on the header bus img
+// Bring in the content images from each side
 window.addEventListener("scroll", (event) => {
   // Smoothly load content
-  if (bringInContentTriggered === false) {
-    bringInContent = setInterval(bringContent, 10);
-  }
+  gsap.to(".content-section .img-content", { opacity: 1, x: 0, duration: 1.5 });
 });
-
-function bringContent() {
-  // Make sure to identify the interval as triggeres
-  bringInContentTriggered = true;
-
-  // slowly increase opacity value
-  if (fadeInVal2 < 1) {
-    fadeInVal2 += 0.008;
-  } else {
-    fadeInVal2 = 1;
-  }
-
-  // slowly bring the elements in
-  if (bringInVal > 0) {
-    bringInVal -= 2;
-  } else {
-    bringInVal = 0;
-  }
-
-  // Bring in the other content
-  contentSectionImg.style.opacity = fadeInVal2;
-  contentSectionImg.style.transform = `translateX(${bringInVal}vw)`;
-  contentSectionImg.style.transition = "all 0.3s";
-
-  inverseContentSectionImg.style.opacity = fadeInVal2;
-  inverseContentSectionImg.style.transform = `translateX(-${bringInVal}vw)`;
-  inverseContentSectionImg.style.transition = "all 0.3s";
-
-  // Make sure you stop the interval
-  if (fadeInVal2 >= 1 && bringInVal === 0) {
-    clearInterval(bringInContent);
-  }
-}
 
 /*************************************
  * Using drag/drop events
  *************************************/
+
+let dragged;
 
 // Get the draggable element
 document.addEventListener(
@@ -361,6 +293,7 @@ draggableObj.addEventListener("dblclick", (event) => {
 
     objectParent.removeChild(event.target);
     contentDestination.appendChild(event.target);
+    event.target.textContent = "DRAG ME BELOW!";
   } else {
     alert("Drag me to a destination!");
   }

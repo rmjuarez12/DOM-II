@@ -51,7 +51,7 @@ The completion of these questions is mandatory for MVP. However, passing the qui
 
 ### Task 3: Stretch
 
-- [ ] Go look at [GSAP](https://greensock.com/) and implement the animations found in that library with your custom events.
+- [x] Go look at [GSAP](https://greensock.com/) and implement the animations found in that library with your custom events.
 
 #### Stretch assignment
 
