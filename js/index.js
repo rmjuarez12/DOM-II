@@ -10,6 +10,9 @@ const body = document.querySelector("body");
 // Header selector
 const header = document.querySelector("header");
 
+// Navigation items
+const navItems = document.querySelectorAll(".nav .nav-link");
+
 // Get intro section
 const introSection = document.querySelector(".intro");
 
@@ -84,6 +87,14 @@ contentPickDestination.forEach((element) => {
   newDesinationPick.textContent = "Drop Here";
 
   element.prepend(newDesinationPick);
+});
+
+/*************************************
+ * Using resize event
+ *************************************/
+
+window.addEventListener("resize", (event) => {
+  contentSectionImg.querySelector("img").src = "https://picsum.photos/400/300";
 });
 
 /*************************************
@@ -353,4 +364,31 @@ draggableObj.addEventListener("dblclick", (event) => {
   } else {
     alert("Drag me to a destination!");
   }
+});
+
+/*************************************
+ * Nest two similar events somewhere in the site and prevent
+ * the event propagation properly. Remember not all
+ * event types bubble.
+ *************************************/
+
+const logoSection = document.querySelector(".logo-heading");
+
+logoSection.addEventListener("click", (event) => {
+  event.stopPropagation();
+  logoSection.style.background = "tomato";
+});
+
+header.addEventListener("click", (event) => {
+  header.style.background = "purple";
+});
+
+/*************************************
+ * Using preventDefault() to stop nav items from triggerring
+ *************************************/
+
+navItems.forEach((element) => {
+  element.addEventListener("click", (event) => {
+    event.preventDefault();
+  });
 });
