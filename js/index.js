@@ -30,6 +30,7 @@ const contentDestinationImg = document.querySelector(".content-destination");
 
 // Get the pick section
 const contentPick = document.querySelector(".content-pick");
+const contentPickBTn = document.querySelectorAll(".content-pick .btn");
 const contentPickDestination = document.querySelectorAll(".destination");
 
 // Get the footer
@@ -72,7 +73,7 @@ inverseContentSectionImg.style.transform = `translateX(${bringInVal}vw)`;
 const newDestination = document.createElement("div");
 newDestination.classList.add("drag-container");
 newDestination.setAttribute("draggable", "true");
-newDestination.textContent = "Drag Me!";
+newDestination.textContent = "Drag Me Below!";
 
 contentDestination.appendChild(newDestination);
 
@@ -108,7 +109,19 @@ contentImgs.forEach((element) => {
  *************************************/
 
 // Ensure user use scroll wheel
-window.addEventListener("keydown", (event) => {});
+window.addEventListener("keydown", (event) => {
+  const keyPressed = event.key;
+
+  if (keyPressed !== "d") {
+    alert("Press the 'd' key for something awesome!");
+  } else {
+    if (body.className === "dark-mode") {
+      body.classList.remove("dark-mode");
+    } else {
+      body.classList.add("dark-mode");
+    }
+  }
+});
 
 /*************************************
  * Using wheel event
@@ -188,7 +201,7 @@ function bringContent() {
 
   // slowly bring the elements in
   if (bringInVal > 0) {
-    bringInVal -= 1;
+    bringInVal -= 2;
   } else {
     bringInVal = 0;
   }
@@ -213,8 +226,6 @@ function bringContent() {
  *************************************/
 
 // Get the draggable element
-document.addEventListener("drag", function (event) {}, false);
-
 document.addEventListener(
   "dragstart",
   function (event) {
@@ -283,14 +294,63 @@ document.addEventListener(
     // move dragged elem to the selected drop target
     if (event.target.className == "drop-container" && dragged.className === "drag-container") {
       event.target.style.background = "";
-      event.target.style.fontSize = "9pt";
+      event.target.style.fontSize = "0pt";
       dragged.parentNode.removeChild(dragged);
       event.target.appendChild(dragged);
       dragged.textContent = "YAY!";
-    } else {
-      dragged.textContent = "DRAG ME!";
+    } else if (dragged.className === "drag-container") {
+      dragged.textContent = "DRAG ME BELOW!";
       contentDestination.appendChild(dragged);
     }
   },
   false
 );
+
+/*************************************
+ * Using click events
+ *************************************/
+
+// Move the draggable container on click of the destination pick and alert the value
+contentPickBTn.forEach((element) => {
+  element.addEventListener("click", (event) => {
+    const dropContainerElm = element.parentElement.querySelector(".drop-container");
+    const allDropContainerElm = document.querySelectorAll(".drop-container");
+    const draggableContainerElm = document.querySelector(".drag-container");
+    const destinationPicked = element.parentElement.querySelector("h4");
+
+    allDropContainerElm.forEach((elm) => {
+      elm.style.fontSize = "";
+      elm.style.opacity = "";
+    });
+
+    draggableContainerElm.parentNode.removeChild(draggableContainerElm);
+    draggableContainerElm.textContent = "YAY!";
+    dropContainerElm.appendChild(draggableContainerElm);
+    dropContainerElm.style.fontSize = 0;
+    dropContainerElm.style.opacity = 1;
+
+    alert(`You picked ${destinationPicked.textContent}!`);
+  });
+});
+
+/*************************************
+ * Using dblclick events
+ *************************************/
+
+// Reset the position of the dragged object once it is double clicked
+const draggableObj = document.querySelector(".drag-container");
+
+draggableObj.addEventListener("dblclick", (event) => {
+  const objectParent = event.target.parentNode;
+
+  if (objectParent.className === "drop-container") {
+    objectParent.style.background = "";
+    objectParent.style.opacity = "";
+    objectParent.style.fontSize = "";
+
+    objectParent.removeChild(event.target);
+    contentDestination.appendChild(event.target);
+  } else {
+    alert("Drag me to a destination!");
+  }
+});

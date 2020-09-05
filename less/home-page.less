@@ -1,3 +1,39 @@
+body {
+  transition: all 3s;
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    transition: all 3s;
+  }
+}
+
+body.dark-mode {
+  background: black;
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    color: white;
+    transition: all 3s;
+  }
+
+  footer {
+    background: #333;
+  }
+}
+
+footer {
+  background: #333;
+  transition: all 3s;
+}
+
 .home {
   a,
   .btn {
@@ -94,7 +130,7 @@
   }
 
   .drag-container {
-    width: 100px;
+    width: 160px;
     cursor: pointer;
     height: 50px;
     background-color: tomato;
