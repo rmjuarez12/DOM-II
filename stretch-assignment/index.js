@@ -49,6 +49,13 @@ rockets.forEach((rocket, index) => {
   }
 });
 
+// Add a takeoff message alert
+const takeOff = document.createElement("p");
+takeOff.textContent = "Taking Off!";
+takeOff.classList.add("take-off", "animate__animated", "animate__flash", "animate__infinite");
+
+rocketContainer.appendChild(takeOff);
+
 /*************************************
  * When a rocket is clicked, moved them
  * to the top of the stack
@@ -118,6 +125,10 @@ rockets.forEach((rocket, index) => {
     // Get the rocket icon and traveler
     const rocketIcon = rocket.childNodes[0];
 
+    // Get the takeoff message and activate it
+    const takeOffTxt = document.querySelector(".take-off");
+    takeOffTxt.style.display = "block";
+
     // Set animation to playing once it begins
     animationPlaying = true;
 
@@ -138,7 +149,7 @@ rockets.forEach((rocket, index) => {
     gsap.to(".traveler", { opacity: 0, x: 0, ease: "sine", duration: 1 });
 
     // Launch the rocket
-    gsap.to(rocket, { y: -(rocket.offsetTop - 120), ease: "slow", duration: 2, delay: 2 });
+    gsap.to(rocket, { y: -(rocket.offsetTop - 12), ease: "slow", duration: 2, delay: 2 });
 
     // Return rocket to position
     gsap.to(rocket, { borderWidth: 2, ease: "slow", duration: 2, delay: 4 });
@@ -147,10 +158,11 @@ rockets.forEach((rocket, index) => {
     setTimeout(function () {
       // Reset the position of rocket
       gsap.to(rocket, { y: 0, opacity: 1, duration: 0 });
-      gsap.to(".block", { y: 0, opacity: 1, duration: 0.5 });
+      gsap.to(".block", { y: 0, opacity: 1, duration: 0.1 });
       gsap.to(".traveler", { opacity: 1, duration: 0 });
       animationPlaying = false;
       rocket.classList.add("active-rocket");
+      takeOffTxt.style.display = "none";
 
       rocket.parentNode.removeChild(rocket);
       rocketContainer.prepend(rocket);

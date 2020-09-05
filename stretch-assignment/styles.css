@@ -3,10 +3,24 @@ body {
   /*justify-content: center;*/
 }
 
+.take-off {
+  font-size: 30pt;
+  font-family: Arial;
+  text-transform: uppercase;
+  font-weight: bold;
+  position: absolute;
+  top: 30%;
+  left: 300px;
+  width: 350px;
+  display: none;
+  --animate-duration: 2s;
+}
+
 .blocks {
   display: flex;
   flex-direction: column;
   margin-top: 100px;
+  position: relative;
 }
 
 .block {
