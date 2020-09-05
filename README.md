@@ -36,7 +36,7 @@ Fun Bus wants you to make their site more interactive. They are relying on you t
   - `scroll` \*
   - `select`
   - `dblclick`
-  - `drag / drop`
+  - `drag / drop` \*
 
 Note: Drag and drop is a bit more advanced than the others: it's not actually a single type of event but several types that need to work together.
 

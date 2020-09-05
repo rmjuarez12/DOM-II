@@ -24,6 +24,17 @@ const inverseContentSection = document.querySelector(".inverse-content .text-con
 const contentSectionImg = document.querySelector(".content-section .img-content");
 const inverseContentSectionImg = document.querySelector(".inverse-content .img-content");
 
+// Get destination section
+const contentDestination = document.querySelector(".content-destination");
+const contentDestinationImg = document.querySelector(".content-destination");
+
+// Get the pick section
+const contentPick = document.querySelector(".content-pick");
+const contentPickDestination = document.querySelectorAll(".destination");
+
+// Get the footer
+const footer = document.querySelector("footer");
+
 // Smoothing variables
 let fadeInVal = 0;
 let fadeInVal2 = 0;
@@ -35,7 +46,7 @@ let bringInContent;
 let bringInContentTriggered = false;
 
 /*************************************
- * Setting initial styles
+ * Setting initial styles and content
  *************************************/
 
 // Ensure the header has a high z-index
@@ -56,6 +67,23 @@ contentSectionImg.style.transform = `translateX(-${bringInVal}vw)`;
 
 // Setting up element that will come from right
 inverseContentSectionImg.style.transform = `translateX(${bringInVal}vw)`;
+
+// Add a draggable container for the destination section
+const newDestination = document.createElement("div");
+newDestination.classList.add("drag-container");
+newDestination.setAttribute("draggable", "true");
+newDestination.textContent = "Drag Me!";
+
+contentDestination.appendChild(newDestination);
+
+// Add a droppable container for the above draggable container
+contentPickDestination.forEach((element) => {
+  const newDesinationPick = document.createElement("div");
+  newDesinationPick.classList.add("drop-container");
+  newDesinationPick.textContent = "Drop Here";
+
+  element.prepend(newDesinationPick);
+});
 
 /*************************************
  * Using mouseover/mouseleave event
@@ -179,3 +207,90 @@ function bringContent() {
     clearInterval(bringInContent);
   }
 }
+
+/*************************************
+ * Using drag/drop events
+ *************************************/
+
+// Get the draggable element
+document.addEventListener("drag", function (event) {}, false);
+
+document.addEventListener(
+  "dragstart",
+  function (event) {
+    // store a ref. on the dragged elem
+    dragged = event.target;
+
+    // make it half transparent
+    if (dragged.className === "drag-container") {
+      event.target.style.opacity = 0.5;
+      event.target.style.transform = "rotate(15deg)";
+    }
+  },
+  false
+);
+
+document.addEventListener(
+  "dragend",
+  function (event) {
+    // reset the transparency
+    event.target.style.opacity = "";
+    event.target.style.transform = "";
+  },
+  false
+);
+
+/* events fired on the drop targets */
+document.addEventListener(
+  "dragover",
+  function (event) {
+    // prevent default to allow drop
+    event.preventDefault();
+  },
+  false
+);
+
+document.addEventListener(
+  "dragenter",
+  function (event) {
+    // highlight potential drop target when the draggable element enters it
+    if (event.target.className == "drop-container" && dragged.className === "drag-container") {
+      event.target.style.background = "#17a2b8";
+      event.target.style.opacity = 1;
+    }
+  },
+  false
+);
+
+document.addEventListener(
+  "dragleave",
+  function (event) {
+    // reset background of potential drop target when the draggable element leaves it
+    if (event.target.className == "drop-container" && dragged.className === "drag-container") {
+      event.target.style.background = "";
+      event.target.style.opacity = "";
+      event.target.style.fontSize = "";
+    }
+  },
+  false
+);
+
+document.addEventListener(
+  "drop",
+  function (event) {
+    // prevent default action (open as link for some elements)
+    event.preventDefault();
+    // move dragged elem to the selected drop target
+    if (event.target.className == "drop-container" && dragged.className === "drag-container") {
+      event.target.style.background = "";
+      event.target.style.fontSize = "9pt";
+      dragged.parentNode.removeChild(dragged);
+      event.target.appendChild(dragged);
+      dragged.textContent = "YAY!";
+    } else {
+      dragged.textContent = "DRAG ME!";
+      contentDestination.appendChild(dragged);
+    }
+  },
+  false
+);
