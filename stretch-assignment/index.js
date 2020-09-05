@@ -14,12 +14,16 @@ const rockets = document.querySelectorAll(".block");
 // Check if animation is playing
 let animationPlaying = false;
 
+// Used for the interval when traveler is moving
+let travelerMovement;
+let newDistance;
+
 /*************************************
  * Setting initial styles and content
  *************************************/
 
 rockets.forEach((rocket) => {
-  rocket.setAttribute("data-xPos", 0);
+  rocket.setAttribute("data-distance", 0);
 });
 
 // Add a rocket to the container
@@ -50,6 +54,42 @@ rockets.forEach((rocket, index) => {
  *************************************/
 
 rockets.forEach((rocket, index) => {
+  // If the mouse button is held down, the traveler will move
+  const rocketShip = rocket.childNodes[0];
+
+  rocketShip.addEventListener("mousedown", (event) => {
+    // Check to see if we have the active rocket class.If not, just return
+    if (rocket.classList.length < 3) {
+      console.log("Not an active rocket");
+      return;
+    }
+
+    // Get the traveler
+    const traveler = rocket.childNodes[1];
+
+    // Get the distance travel attribute
+    const distanceTraveled = parseInt(rocket.getAttribute("data-distance"));
+
+    // Declare the new distance and make it equal to current distance
+    let newDistance = distanceTraveled;
+
+    // Start the interval movement
+    travelerMovement = setInterval(() => {
+      newDistance += 1;
+      rocket.style.width = `${newDistance}px`;
+      rocket.setAttribute("data-distance", newDistance);
+      gsap.to(traveler, { rotation: 15, y: -10, x: newDistance, ease: "power", duration: 0.5 });
+
+      console.log(distanceTraveled);
+    }, 20);
+  });
+
+  // Once you release the mouse, stop the interval
+  rocketShip.addEventListener("mouseup", (event) => {
+    gsap.to(".traveler", { rotation: 0, y: 0, duration: 1 });
+    clearInterval(travelerMovement);
+  });
+
   // When a rocket is clicked, have it go to the top
   rocket.addEventListener("click", (event) => {
     // Check if animation is playing
@@ -63,20 +103,19 @@ rockets.forEach((rocket, index) => {
 
     // Get the rocket icon and traveler
     const rocketIcon = rocket.childNodes[0];
-    const traveler = rocket.childNodes[1];
 
     // Set animation to playing once it begins
     animationPlaying = true;
 
     rockets.forEach((otherRockets, i) => {
       if (i !== index) {
-        gsap.to(otherRockets, { y: 100, ease: "sine", duration: 2 });
+        gsap.to(otherRockets, { y: 95, opacity: 0.3, ease: "sine", duration: 2 });
         otherRockets.classList.remove("active-rocket");
       }
     });
 
     // Move rocket to side and remove border, prepare for takeoff
-    gsap.to(rocketIcon, { x: rocket.offsetHeight, ease: "slow", duration: 2 });
+    gsap.to(rocketIcon, { x: 60, ease: "slow", duration: 2 });
     gsap.to(".block", { borderWidth: 0, ease: "sine", duration: 2 });
     gsap.to(".traveler", { opacity: 0, ease: "sine", duration: 1 });
 
@@ -89,7 +128,8 @@ rockets.forEach((rocket, index) => {
 
     setTimeout(function () {
       // Reset the position of rocket
-      gsap.to(".block", { y: 0, duration: 0 });
+      gsap.to(rocket, { y: 0, opacity: 1, duration: 0 });
+      gsap.to(".block", { y: 0, opacity: 1, duration: 0.5 });
       gsap.to(".traveler", { opacity: 1, duration: 0 });
       animationPlaying = false;
       rocket.classList.add("active-rocket");
