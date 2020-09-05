@@ -121,17 +121,21 @@ rockets.forEach((rocket, index) => {
     // Set animation to playing once it begins
     animationPlaying = true;
 
+    // For the other rockets, move them down
     rockets.forEach((otherRockets, i) => {
       if (i !== index) {
-        gsap.to(otherRockets, { y: 95, opacity: 0.3, ease: "sine", duration: 2 });
-        otherRockets.classList.remove("active-rocket");
+        gsap.to(otherRockets, { y: 95, opacity: 0.3, width: "auto", ease: "sine", duration: 2 });
+
+        setTimeout(function () {
+          otherRockets.classList.remove("active-rocket");
+        }, 1000);
       }
     });
 
     // Move rocket to side and remove border, prepare for takeoff
     gsap.to(rocketIcon, { x: 60, ease: "slow", duration: 2 });
     gsap.to(".block", { borderWidth: 0, ease: "sine", duration: 2 });
-    gsap.to(".traveler", { opacity: 0, ease: "sine", duration: 1 });
+    gsap.to(".traveler", { opacity: 0, x: 0, ease: "sine", duration: 1 });
 
     // Launch the rocket
     gsap.to(rocket, { y: -(rocket.offsetTop - 120), ease: "slow", duration: 2, delay: 2 });
