@@ -1,4 +1,44 @@
+body {
+  transition: all 3s;
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    transition: all 3s;
+  }
+}
+
+body.dark-mode {
+  background: black;
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    color: white;
+    transition: all 3s;
+  }
+
+  footer {
+    background: #333;
+  }
+}
+
+footer {
+  background: #333;
+  transition: all 3s;
+}
+
 .home {
+  a,
+  .btn {
+    transition: all 0.3s;
+  }
 
   .intro {
     padding: 90px 0 10px;
@@ -20,8 +60,6 @@
     flex-wrap: wrap;
     justify-content: space-between;
 
-   
-    
     .text-content {
       width: 48%;
       padding-right: 1%;
@@ -78,6 +116,10 @@
     width: 75%;
     margin: 0 auto 30px;
 
+    img {
+      margin-bottom: 20px;
+    }
+
     @media @mobile {
       width: 100%;
     }
@@ -87,11 +129,45 @@
     }
   }
 
+  .drag-container {
+    width: 160px;
+    cursor: pointer;
+    height: 50px;
+    background-color: tomato;
+    display: block;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    margin: 0 auto;
+    font-size: 12pt;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s;
+    border-radius: 10px;
+  }
+
   .content-pick {
     padding-top: 30px;
     border-top: 2px dashed @navigation-border;
     display: flex;
     justify-content: space-between;
+
+    .drop-container {
+      width: 100%;
+      display: block;
+      min-height: 30px;
+      margin-bottom: 15px;
+      background-color: purple;
+      padding: 10px;
+      font-size: 13pt;
+      transition: all 0.3s;
+      color: #fff;
+      opacity: 0.5;
+
+      .drag-container {
+        margin-top: 5px;
+      }
+    }
 
     @media @mobile {
       flex-wrap: wrap;
@@ -105,10 +181,10 @@
         width: 80%;
         margin: 0 auto 30px;
       }
-      
+
       .btn {
-        .button-creator(200px, 45px, @button-bg, @white, 1.8rem);     
+        .button-creator(200px, 45px, @button-bg, @white, 1.8rem);
       }
     }
   }
-}// home
+} // home
